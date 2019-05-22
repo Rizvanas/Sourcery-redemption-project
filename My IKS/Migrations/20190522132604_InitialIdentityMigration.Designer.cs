@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_IKS.Persistance;
 
 namespace My_IKS.Migrations
 {
     [DbContext(typeof(IKSContext))]
-    partial class IKSContextModelSnapshot : ModelSnapshot
+    [Migration("20190522132604_InitialIdentityMigration")]
+    partial class InitialIdentityMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,6 +194,7 @@ namespace My_IKS.Migrations
                     b.Property<bool>("IsBlocked");
 
                     b.Property<string>("JobTitle")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<string>("LastName")
@@ -199,6 +202,7 @@ namespace My_IKS.Migrations
                         .HasMaxLength(50);
 
                     b.Property<string>("Location")
+                        .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<bool>("LockoutEnabled");

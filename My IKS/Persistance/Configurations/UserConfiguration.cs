@@ -12,11 +12,10 @@ namespace My_IKS.Persistance.Configurations
     {
         public void Configure(EntityTypeBuilder<User> builder)
         {
-            builder.HasKey(user => user.UserId);
             builder.Property(user => user.FirstName).HasMaxLength(50).IsRequired();
             builder.Property(user => user.LastName).HasMaxLength(50).IsRequired();
-            builder.Property(user => user.JobTitle).HasMaxLength(100).IsRequired();
-            builder.Property(user => user.Location).HasMaxLength(100).IsRequired();
+            builder.Property(user => user.JobTitle).HasMaxLength(100);
+            builder.Property(user => user.Location).HasMaxLength(100);
             builder.Property(user => user.Email).IsRequired();
         }
     }

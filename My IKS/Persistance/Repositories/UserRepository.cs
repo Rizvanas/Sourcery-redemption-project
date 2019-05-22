@@ -29,7 +29,7 @@ namespace My_IKS.Persistance.Repositories
                 .ThenInclude(us => us.Skill)
                 .Include(u => u.Goals).AsQueryable();
 
-            var columnsMap = new Dictionary<string, Expression<Func<User, object>>>
+            var orderingColumnsMap = new Dictionary<string, Expression<Func<User, object>>>
             {
                 ["name"] = v => v.FirstName + v.LastName,
                 ["skills"] = v => v.UserSkills.Select(s => s.Skill.Title),
@@ -47,7 +47,7 @@ namespace My_IKS.Persistance.Repositories
 
             query = query
                 .ApplySearchKeyword(filter, searchColumnsMap)
-                .ApplyOrdering(filter, columnsMap)
+                .ApplyOrdering(filter, orderingColumnsMap)
                 .ApplyPagination(filter);
 
             return await query.ToListAsync();

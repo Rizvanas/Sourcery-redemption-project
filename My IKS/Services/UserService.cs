@@ -35,7 +35,15 @@ namespace My_IKS.Services
 
         public IEnumerable<UserIntroResponse> GetUsersForList(FilterRequest filterRequest)
         {
-            return _userRepository.GetUsersAsync().Result.Select(u => new UserIntroResponse
+            return _userRepository.GetUsersAsync(new Filter
+            {
+                SearchBy = filterRequest.SearchBy,
+                Keyword = filterRequest.Keyword,
+                SortBy = filterRequest.SortBy,
+                Page = filterRequest.Page,
+                PageSize = filterRequest.PageSize,
+                SortDirection = filterRequest.SortDirection
+            }).Result.Select(u => new UserIntroResponse
             {
                 FirstName = u.FirstName,
                 LastName = u.LastName,

@@ -34,8 +34,8 @@ namespace My_IKS.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
-        public ActionResult<IEnumerable<User>> GetAll(FilterRequest filterRequest)
+        [HttpPost]
+        public ActionResult<IEnumerable<User>> GetAll([FromBody] FilterRequest filterRequest)
         {
             return Ok(_userService.GetUsersForList(filterRequest));
         }

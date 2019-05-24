@@ -6,8 +6,8 @@ using My_IKS.Data.Domain;
 
 namespace My_IKS.Data.Repositories
 {
-    public interface IGoalRepository : IRepository<Goal>
+    public interface IGoalRepository : IRepository<Domain.Goal>
     {
-        IEnumerable<Goal> GetUserGoals(int userId);
+        IEnumerable<Domain.Goal> GetUserGoals(int userId);
     }
 }

@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using My_IKS.Persistance.Configurations;
+using AutoMapper;
 
 namespace My_IKS
 {
@@ -37,12 +39,21 @@ namespace My_IKS
         public void ConfigureServices(IServiceCollection services)
         {
 
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<IKSContext>().AddDefaultTokenProviders();
-            //services.AddDefaultIdentity<User>().AddEntityFrameworkStores<IKSContext>();
-
+            services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddDbContext<IKSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IKSDatabase")));
+
+            services.AddIdentity<User, Role>().AddEntityFrameworkStores<IKSContext>();
+
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IUserRepository, UserRepository>();
@@ -88,11 +99,22 @@ namespace My_IKS
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors
+            (
+               builder => builder
+               .WithOrigins(Configuration["ApplicationSettings:ClientURL"].ToString())
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+            );
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -103,14 +125,7 @@ namespace My_IKS
                 app.UseHsts();
             }
 
-            //app.UseCors
-            //(
-            //    builder => builder
-            //    .WithOrigins(Configuration["ApplicationSettings:ClientURL"].ToString())
-            //    .AllowAnyHeader()
-            //    .AllowAnyMethod()
-            //);
-
+           
             app.UseHttpsRedirection();
             app.UseMvc();
         }

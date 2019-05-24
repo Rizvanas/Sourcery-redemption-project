@@ -16,7 +16,7 @@ namespace My_IKS.Persistance
         { }
 
         public virtual DbSet<Skill> Skills { get; set; }
-        public virtual DbSet<Goal> Goals { get; set; }
+        public virtual DbSet<Data.Domain.Goal> Goals { get; set; }
         public virtual DbSet<UserSkill> UserSkills { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

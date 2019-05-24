@@ -22,18 +22,9 @@ namespace My_IKS.Services
             _goalRepository = goalRepository;
             _skillRepository = skillRepository;
         }
-        
-        public async Task<UserDetailsResponse> GetUserWithSkills(int userId)
-        {
-            return GetUserDetails(await _userRepository.Get(userId), _skillRepository.GetUserSkills(userId));
-        }
+       
 
-        public async Task<UserDetailsResponse> GetUserWithGoals(int userId)
-        {
-            return GetUserDetails(await _userRepository.Get(userId), _goalRepository.GetUserGoals(userId));
-        }
-
-        public IEnumerable<UserIntroResponse> GetUsersForList(FilterRequest filterRequest)
+        public IEnumerable<UserIntroResponse> GetUsersList(FilterRequest filterRequest)
         {
             return _userRepository.GetUsersAsync(new Filter
             {
@@ -53,16 +44,25 @@ namespace My_IKS.Services
             });
         }
 
-        private UserDetailsResponse GetUserDetails(User user, IEnumerable<UserDetail> details)
+        public IEnumerable<NonActiveUserResponse> GetNonActiveUsersList(FilterRequest filterRequest)
         {
-            return new UserDetailsResponse
+            return _userRepository.GetUsersAsync(new Filter
             {
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                JobTitle = user.JobTitle,
-                Email = user.Email,
-                Details = details
-            };
+                SearchBy = filterRequest.SearchBy,
+                Keyword = filterRequest.Keyword,
+                SortBy = filterRequest.SortBy,
+                Page = filterRequest.Page,
+                PageSize = filterRequest.PageSize,
+                SortDirection = filterRequest.SortDirection
+            }).Result.Select(u => new NonActiveUserResponse
+            {
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                IsActive = u.IsActive,
+                IsBLocked = u.IsBlocked,
+                LastActiveTime = u.LastActiveTime
+            });
         }
+
     }
 }

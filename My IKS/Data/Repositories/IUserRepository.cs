@@ -9,5 +9,6 @@ namespace My_IKS.Data.Repositories
     public interface IUserRepository : IRepository<User>
     {
         Task<IEnumerable<User>> GetUsersAsync(Filter filter);
+        Task<User> GetUserAsync(int userId);
     }
 }

@@ -8,9 +8,9 @@ using My_IKS.Data.Domain;
 
 namespace My_IKS.Persistance.Configurations
 {
-    public class GoalConfiguration : IEntityTypeConfiguration<Goal>
+    public class GoalConfiguration : IEntityTypeConfiguration<Data.Domain.Goal>
     {
-        public void Configure(EntityTypeBuilder<Goal> builder)
+        public void Configure(EntityTypeBuilder<Data.Domain.Goal> builder)
         {
             builder.HasKey(goal => goal.GoalId);
             builder.Property(goal => goal.Title).HasMaxLength(50).IsRequired();

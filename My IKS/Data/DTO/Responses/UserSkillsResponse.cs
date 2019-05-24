@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using My_IKS.Data.Domain;
 
-namespace My_IKS.Data.DTO.Requests
+namespace My_IKS.Data.DTO.Responses
 {
-    public class UserRegisterRequest
+    public class UserSkillsResponse
     {
-        public string UserName { get; set; }
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string JobTitle { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
-        public string Role { get; set; }
+        public IEnumerable<Object> Skills { get; set; }
     }
 }

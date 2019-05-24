@@ -9,53 +9,61 @@ using My_IKS.Data.Domain;
 using My_IKS.Data.DTO.Responses;
 using My_IKS.Services;
 using My_IKS.Data.DTO.Requests;
+using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace My_IKS.Controllers
 {   
     [Route("api/users")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
         private readonly ISkillRepository _skillRepository;
         private readonly IGoalRepository _goalRepository;
         private readonly UserService _userService;
+        private readonly IMapper _mapper;
+
         public UsersController
         (
             IUserRepository userRepository,
             ISkillRepository skillRepository,
             IGoalRepository goalRepository,
-            UserService userService
+            UserService userService,
+            IMapper mapper
         )
         {
             _userRepository = userRepository;
             _skillRepository = skillRepository;
             _goalRepository = goalRepository;
             _userService = userService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public ActionResult<IEnumerable<User>> GetAll([FromBody] FilterRequest filterRequest)
+        public async Task<ActionResult<IEnumerable<UserIntroResponse>>> GetAll([FromBody] FilterRequest filterRequest)
         {
-            return Ok(_userService.GetUsersForList(filterRequest));
-        }
-
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<User>> Get(int userId)
-        {
-            return Ok(await _userRepository.Get(userId));
+            var filter = _mapper.Map<Filter>(filterRequest);
+            var users = await _userRepository.GetUsersAsync(filter);
+            var usersResponse = _mapper.Map<IEnumerable<UserIntroResponse>>(users);
+            return Ok(usersResponse);
         }
 
         [HttpGet("{userId}/skills")]
-        public async Task<ActionResult<IEnumerable<Skill>>> GetUserSkills(int userId)
+        public async Task<ActionResult<IEnumerable<UserSkillsResponse>>> GetUserSkills(int userId)
         {
-            return Ok(await _userService.GetUserWithSkills(userId));
+            var user = await _userRepository.GetUserAsync(userId);
+            var userWithSkills = _mapper.Map<UserSkillsResponse>(user);
+            return Ok(userWithSkills);
         }
 
         [HttpGet("{userId}/goals")]
-        public async Task<ActionResult<IEnumerable<Goal>>> GetUserGoals(int userId)
+        public async Task<ActionResult<IEnumerable<UserGoalsResponse>>> GetUserGoals(int userId)
         {
-            return Ok(await _userService.GetUserWithGoals(userId));
+            var user = await _userRepository.GetUserAsync(userId);
+            var userWithGoals = _mapper.Map<UserGoalsResponse>(user);
+            return Ok(userWithGoals);
         }
     }
 }

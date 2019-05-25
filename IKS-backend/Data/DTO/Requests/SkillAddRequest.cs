@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace My_IKS.Data.DTO.Requests
 {
-    public class UserBlockRequest
+    public class SkillAddRequest
     {
-        public bool IsBlocked { get; set; }
+        public string Title { get; set; }
+        public int SkillLevel { get; set; }
     }
 }

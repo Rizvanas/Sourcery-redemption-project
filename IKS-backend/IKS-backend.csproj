@@ -14,8 +14,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Connected Services\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Services\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
 </Project>

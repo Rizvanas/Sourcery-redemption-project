@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_IKS.Persistance;
 
 namespace My_IKS.Migrations
 {
     [DbContext(typeof(IKSContext))]
-    partial class IKSContextModelSnapshot : ModelSnapshot
+    [Migration("20190523182232_MinorSchemaChanges")]
+    partial class MinorSchemaChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +113,6 @@ namespace My_IKS.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(240);
 
-                    b.Property<int>("Requests");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -156,6 +156,8 @@ namespace My_IKS.Migrations
                     b.Property<int>("SkillId")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Level");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -220,6 +222,8 @@ namespace My_IKS.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<int>("RequestsAmount");
 
                     b.Property<string>("SecurityStamp");
 

@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace My_IKS.Data.Domain
+namespace My_IKS.Data.DTO.Requests
 {
-    public class Goal : UserDetail
+    public class GoalUpdateRequest
     {
-        public int GoalId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public User User { get; set; }
-        public int Requests { get; set; }
     }
 }

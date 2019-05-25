@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using My_IKS.Persistance;
 
 namespace My_IKS.Migrations
 {
     [DbContext(typeof(IKSContext))]
-    partial class IKSContextModelSnapshot : ModelSnapshot
+    [Migration("20190522135956_UpdateConfigurations")]
+    partial class UpdateConfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +113,6 @@ namespace My_IKS.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(240);
 
-                    b.Property<int>("Requests");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -157,6 +157,8 @@ namespace My_IKS.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Level");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -194,8 +196,6 @@ namespace My_IKS.Migrations
                     b.Property<string>("JobTitle")
                         .HasMaxLength(100);
 
-                    b.Property<DateTime>("LastActiveTime");
-
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -221,9 +221,13 @@ namespace My_IKS.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed");
 
+                    b.Property<int>("RequestsAmount");
+
                     b.Property<string>("SecurityStamp");
 
                     b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<int>("UserId");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256);

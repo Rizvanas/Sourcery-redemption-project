@@ -2,7 +2,7 @@
 
 namespace My_IKS.Migrations
 {
-    public partial class UserSkillChange : Migration
+    public partial class MoveRequestsToGoal : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,9 +10,13 @@ namespace My_IKS.Migrations
                 name: "Level",
                 table: "Skills");
 
+            migrationBuilder.DropColumn(
+                name: "RequestsAmount",
+                table: "AspNetUsers");
+
             migrationBuilder.AddColumn<int>(
-                name: "SkillLevel",
-                table: "UserSkill",
+                name: "Requests",
+                table: "Goals",
                 nullable: false,
                 defaultValue: 0);
         }
@@ -20,12 +24,18 @@ namespace My_IKS.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "SkillLevel",
-                table: "UserSkill");
+                name: "Requests",
+                table: "Goals");
 
             migrationBuilder.AddColumn<int>(
                 name: "Level",
                 table: "Skills",
+                nullable: false,
+                defaultValue: 0);
+
+            migrationBuilder.AddColumn<int>(
+                name: "RequestsAmount",
+                table: "AspNetUsers",
                 nullable: false,
                 defaultValue: 0);
         }

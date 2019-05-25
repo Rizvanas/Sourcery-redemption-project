@@ -14,6 +14,7 @@ namespace My_IKS.Persistance.Configurations
         {
             builder.HasKey(skill => skill.SkillId);
             builder.Property(skill => skill.Title).HasMaxLength(50).IsRequired();
+            builder.Ignore(skill => skill.Level);
         }
     }
 }

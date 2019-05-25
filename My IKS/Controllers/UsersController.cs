@@ -7,7 +7,6 @@ using My_IKS.Data.Repositories;
 using My_IKS.Persistance.Repositories;
 using My_IKS.Data.Domain;
 using My_IKS.Data.DTO.Responses;
-using My_IKS.Services;
 using My_IKS.Data.DTO.Requests;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
@@ -22,7 +21,6 @@ namespace My_IKS.Controllers
         private readonly IUserRepository _userRepository;
         private readonly ISkillRepository _skillRepository;
         private readonly IGoalRepository _goalRepository;
-        private readonly UserService _userService;
         private readonly IMapper _mapper;
 
         public UsersController
@@ -30,14 +28,12 @@ namespace My_IKS.Controllers
             IUserRepository userRepository,
             ISkillRepository skillRepository,
             IGoalRepository goalRepository,
-            UserService userService,
             IMapper mapper
         )
         {
             _userRepository = userRepository;
             _skillRepository = skillRepository;
             _goalRepository = goalRepository;
-            _userService = userService;
             _mapper = mapper;
         }
 

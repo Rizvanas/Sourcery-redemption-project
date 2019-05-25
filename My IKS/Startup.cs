@@ -16,7 +16,6 @@ using My_IKS.Persistance;
 using My_IKS.Data.Repositories;
 using My_IKS.Persistance.Repositories;
 using My_IKS.Data;
-using My_IKS.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -59,7 +58,6 @@ namespace My_IKS
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<ISkillRepository, SkillRepository>();
             services.AddScoped<IGoalRepository, GoalRepository>();
-            services.AddScoped<UserService>();
 
             services.Configure<IdentityOptions>(options =>
             {

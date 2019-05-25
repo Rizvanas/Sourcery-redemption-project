@@ -6,10 +6,7 @@ using My_IKS.Data.Domain;
 using My_IKS.Data.DTO.Requests;
 using My_IKS.Data.DTO.Responses;
 using My_IKS.Data.Repositories;
-using My_IKS.Services;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace My_IKS.Controllers
@@ -36,13 +33,12 @@ namespace My_IKS.Controllers
         {
             var filter = _mapper.Map<Filter>(filterRequest);
             var users = await _userRepository.GetUsersAsync(filter);
-            var usersWithRequests = _mapper.Map<IEnumerable<UserRequestsResponse>>(users);
 
-            return Ok(usersWithRequests);
+            return Ok(_mapper.Map<IEnumerable<UserRequestsResponse>>(users));
         }
 
         [HttpPut("users/{id}/block")]
-        public async Task<ActionResult<NonActiveUserResponse>> UpdateUser(int id, [FromBody] FilterRequest filterRequest)
+        public async Task<ActionResult<NonActiveUserResponse>> BlockUser(int id, [FromBody] FilterRequest filterRequest)
         {
             var user = await _userRepository.GetUserAsync(id);
             user.IsBlocked = true;
@@ -50,9 +46,8 @@ namespace My_IKS.Controllers
 
             var filter = _mapper.Map<Filter>(filterRequest);
             var users = await _userRepository.GetUsersAsync(filter);
-            var nonActiveUsers = _mapper.Map<IEnumerable<NonActiveUserResponse>>(users);
 
-            return Ok(nonActiveUsers);
+            return Ok(_mapper.Map<IEnumerable<NonActiveUserResponse>>(users));
         }
     }
 }

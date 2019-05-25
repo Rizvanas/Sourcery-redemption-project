@@ -47,9 +47,6 @@ namespace My_IKS.Data
                     g.Requests
                 })));
 
-            CreateMap<UserProfile, User>()
-                .ForAllMembers(o => o.Condition((source, destination, member) => member != null));
-
             CreateMap<User, UserRequestsResponse>().ForMember(dest => dest.Goals, opt => opt.MapFrom(src => src.Goals.Select(g => new
             {
                 g.GoalId,
@@ -57,6 +54,15 @@ namespace My_IKS.Data
                 g.Description,
                 g.Requests
             })));
+
+            CreateMap<SkillUpdateRequest, UserSkill>()
+                .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
+
+            CreateMap<GoalUpdateRequest, Goal>()
+                .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
+
+            CreateMap<UserProfile, User>()
+                .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
 
             CreateMap<UserLoginRequest, User>();
             CreateMap<User, NonActiveUserResponse>();

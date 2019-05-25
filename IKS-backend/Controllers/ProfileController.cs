@@ -65,6 +65,29 @@ namespace My_IKS.Controllers
             return Ok();
         }
 
+        [HttpDelete("skills/{skillId}")]
+        public async Task<IActionResult> DeleteUserSkill(int skillId)
+        {
+            var userId = User.Claims.First(c => c.Type == "UerId").Value;
+            var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
+
+            user.UserSkills.Remove(user.UserSkills.Find(us => us.SkillId == skillId));
+            await _unitOfWork.CompleteAsync();
+
+            return Ok();
+        }
+
+        [HttpPost("skills")]
+        public async Task<IActionResult> AddUserSkill([FromBody] SkillAddRequest addRequest)
+        {
+            var userId = User.Claims.First(c => c.Type == "UserId").Value;
+            var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
+
+            user.UserSkills.Add(_mapper.Map<UserSkill>(addRequest));
+            
+            return Ok();
+        }
+
         [HttpPut("goals/{goalId}/edit")]
         public async Task<ActionResult<Object>> EditUserGoal(int goalId, [FromBody] GoalUpdateRequest updateRequest)
         {

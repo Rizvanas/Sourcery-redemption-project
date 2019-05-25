@@ -58,6 +58,9 @@ namespace My_IKS.Data
             CreateMap<SkillUpdateRequest, UserSkill>()
                 .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
 
+            CreateMap<SkillAddRequest, UserSkill>()
+                .ForMember(dest => dest.Skill, opt => opt.MapFrom(src => src.Title));
+
             CreateMap<GoalUpdateRequest, Goal>()
                 .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
 

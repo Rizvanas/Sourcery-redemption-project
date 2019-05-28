@@ -38,9 +38,9 @@ namespace My_IKS
         public void ConfigureServices(IServiceCollection services)
         {
 
-            var mappingConfig = new MapperConfiguration(mc =>
+            var mappingConfig = new MapperConfiguration(config =>
             {
-                mc.AddProfile(new MappingProfile());
+                config.AddProfile(new MappingProfile());
             });
 
             IMapper mapper = mappingConfig.CreateMapper();
@@ -51,7 +51,14 @@ namespace My_IKS
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddDbContext<IKSContext>(options => options.UseSqlServer(Configuration.GetConnectionString("IKSDatabase")));
 
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<IKSContext>();
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<IKSContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/account/login";
+            });
 
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
@@ -75,28 +82,30 @@ namespace My_IKS
                 options.User.RequireUniqueEmail = true;
             });
 
-            services.AddCors();
-
-            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWTSecret"].ToString());
-            services.AddAuthentication(options =>
+            services.ConfigureApplicationCookie(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.LoginPath = "/account/login";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            });
 
-            }).AddJwtBearer(options => 
+           
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWTSecret"].ToString());
+            services.AddAuthentication()
+            .AddJwtBearer(options => 
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
                     ClockSkew = TimeSpan.Zero
                 };
             });
+           
 
             services.AddCors();
         }

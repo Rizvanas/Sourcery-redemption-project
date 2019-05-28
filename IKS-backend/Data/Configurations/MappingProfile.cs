@@ -20,7 +20,12 @@ namespace My_IKS.Data
                     dest.Location = "Unknown";
             });
 
-            CreateMap<User, UserIntroResponse>().AfterMap((src, dest) =>
+            CreateMap<User, UserIntroResponse>()
+                .ForMember(dest => dest.SkillTitles, 
+                opt => opt.MapFrom(src => src.UserSkills.Select(s => s.Skill.Title)))
+                .ForMember(dest => dest.GoalTitles, 
+                opt => opt.MapFrom(src => src.Goals.Select(g => g.Title)))
+                .AfterMap((src, dest) =>
             {
                 if (dest.SkillTitles == null)
                     dest.SkillTitles = new List<string>();
@@ -38,8 +43,8 @@ namespace My_IKS.Data
                 })));
 
             CreateMap<User, UserGoalsResponse>()
-                .ForMember(dest => dest.Goals, (IMemberConfigurationExpression<User, UserGoalsResponse, IEnumerable<Object>> opt) => opt
-                .MapFrom(src => src.Goals.Select(g => new
+                .ForMember(dest => dest.Goals, (IMemberConfigurationExpression<User, UserGoalsResponse, IEnumerable<Object>> opt) => 
+                opt.MapFrom(src => src.Goals.Select(g => new
                 {
                     g.GoalId,
                     g.Title,
@@ -47,7 +52,8 @@ namespace My_IKS.Data
                     g.Requests
                 })));
 
-            CreateMap<User, UserRequestsResponse>().ForMember(dest => dest.Goals, opt => opt.MapFrom(src => src.Goals.Select(g => new
+            CreateMap<User, UserRequestsResponse>()
+                .ForMember(dest => dest.Goals, opt => opt.MapFrom(src => src.Goals.Select(g => new
             {
                 g.GoalId,
                 g.Title,
@@ -58,14 +64,15 @@ namespace My_IKS.Data
             CreateMap<SkillUpdateRequest, UserSkill>()
                 .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
 
-            CreateMap<SkillAddRequest, UserSkill>()
-                .ForMember(dest => dest.Skill, opt => opt.MapFrom(src => src.Title));
+            CreateMap<SkillAddRequest, Skill>();
 
             CreateMap<GoalUpdateRequest, Goal>()
                 .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
 
             CreateMap<UserProfile, User>()
                 .ForAllMembers(o => o.Condition((src, dest, member) => member != null));
+
+            CreateMap<GoalAddRequest, Goal>();
 
             CreateMap<UserLoginRequest, User>();
             CreateMap<User, NonActiveUserResponse>();

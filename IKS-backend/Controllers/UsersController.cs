@@ -10,12 +10,13 @@ using My_IKS.Data.DTO.Responses;
 using My_IKS.Data.DTO.Requests;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace My_IKS.Controllers
 {   
     [Route("api/users")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;

@@ -16,6 +16,10 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
 using My_IKS.Persistance.Configurations;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using My_IKS.Authentication.Extensions;
 
 namespace My_IKS.Controllers
 {
@@ -29,7 +33,11 @@ namespace My_IKS.Controllers
         private readonly ApplicationSettings _appSettings;
         private readonly IMapper _mapper;
 
-        public AccountsController(UserManager<User> userManager, SignInManager<User> signInManager, IUserRepository userRepository, IOptions<ApplicationSettings> appSettings, IMapper mapper)
+        public AccountsController(UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            IUserRepository userRepository,
+            IOptions<ApplicationSettings> appSettings,
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -58,34 +66,28 @@ namespace My_IKS.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest loginRequest)
         {
+            await _signInManager.SignOutAsync();
             var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-
-            if(user != null && await _userManager.CheckPasswordAsync(user, loginRequest.Password))
-            {
-                var role = await _userManager.GetRolesAsync(user);
-                IdentityOptions _options = new IdentityOptions();
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim("UserId", user.Id.ToString()),
-                        new Claim(_options.ClaimsIdentity.RoleClaimType, role.FirstOrDefault())
-                    }),
-                    Expires = DateTime.UtcNow.AddMinutes(30),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWTSecret)),
-                    SecurityAlgorithms.HmacSha256Signature)
-                };
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var securityToken = tokenHandler.CreateToken(tokenDescriptor);
-                var token = tokenHandler.WriteToken(securityToken);
-
-                return Ok(new { token });
+            var signInResult = await _signInManager.PasswordSignInAsync(user, loginRequest.Password, true, true);
+            
+            if(signInResult.Succeeded)
+            {   
+                var roles = await _userManager.GetRolesAsync(user);   
+                return Ok(new { token = user.GenerateJwtToken(roles, _appSettings.JWTSecret) });
             }
             else
             {
                 return BadRequest(new { message = "Email or password is incorrect." });
             }
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return NoContent();
         }
     }
 }

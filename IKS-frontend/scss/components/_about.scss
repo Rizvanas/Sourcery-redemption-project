@@ -1,0 +1,13 @@
+.about {
+  
+    display: flex;
+    padding: $spacing-large $spacing;
+
+    &__photo {
+        margin-right: $spacing;
+    }
+
+    &__contact {
+        display: flex;
+    }
+}

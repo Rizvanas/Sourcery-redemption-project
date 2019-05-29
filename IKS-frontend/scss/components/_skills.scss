@@ -1,0 +1,12 @@
+.skills {
+    @include reset-list-style;
+
+    &__row {
+        display: flex;
+        padding-bottom: $spacing-small;
+
+        &--last {
+            padding-bottom: $spacing-large;
+        }
+    }
+}

@@ -1,0 +1,32 @@
+// For naming colors variables, we recommend use http://chir.ag/projects/name-that-color/
+
+// MAIN COLOR PALETTE
+$selago: #f3f7fd;
+$white: #fff;
+$regent-gray: #8995a4;
+$mystic: #e1e6ee;
+$dodgerblue: #404dfa;
+$shark: #1d1e1f;
+$persian-green: #00b488;
+$white-ice: #e5faf6;
+$athens-gray: #f9f9fb;
+$valentino: #4a144b;
+$radical-red: #fa3150;
+
+// COMMON COLORS
+$important: $radical-red;
+
+$border: $mystic;
+$active: $dodgerblue;
+
+$background-site: $selago;
+$background-contrast: $white;
+$background-secondary: $athens-gray;
+$background-active: rgba($active, 0.1);
+$background-shadow: rgba(0, 0, 0, 0.04);
+
+$text-main: $shark;
+$text-contrast: $white;
+$text-secondary: $regent-gray;
+
+$slack: $valentino;

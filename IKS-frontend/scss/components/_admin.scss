@@ -1,0 +1,13 @@
+.admin {
+
+    &__header {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__action {
+        margin-bottom: $spacing;
+    }
+    
+}

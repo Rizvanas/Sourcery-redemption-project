@@ -1,0 +1,27 @@
+.content {
+    align-items: stretch;
+    background: $background-contrast;
+    border-radius: $radius;
+    box-shadow: 0 2px 12px 0 $background-shadow;
+    display: flex;
+    flex-direction: column;
+
+    &--bottom-square {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    &__fixed {
+        flex-shrink: 0;
+    }
+
+    &__scrollable {
+        flex: 1 100%;
+        overflow: auto;
+    }
+
+    &--stretch {
+        flex: 1 100%;
+    }
+
+}

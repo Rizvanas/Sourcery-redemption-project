@@ -1,0 +1,95 @@
+.form {
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: $spacing;
+    width: 630px;
+
+    &--last {
+      padding-bottom: $spacing-large;
+    }
+
+    &--goal {
+      width: 454px;
+    }
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+
+    &--wide {
+      width: 100%;
+    }
+
+    &--with-controls {
+      flex-direction: row;
+    }
+  }
+
+  &__input {
+    background: $background-contrast;
+    border: 1px solid $border;
+    border-radius: $radius;
+    color: $text-main;
+    font-size: 15px;
+    height: 50px;
+    padding: $spacing;
+
+    &--short {
+      height: 40px;
+      padding: $spacing-small $spacing;
+    }
+
+    &-suffix {
+      position: absolute;
+      right: $spacing;
+      top: $spacing;
+
+      &-container {
+        position: relative;
+      }
+
+      &-field {
+        width: 100%;
+      }
+    }
+
+    &-wrapper {
+      display: flex;
+      flex-direction: column;
+      width: $skill-width + 2 * $skill-padding;
+    }
+
+    &-controls {
+      align-items: center;
+      display: flex;
+      padding-top: $spacing;
+    }
+
+    &--disabled {
+      background: $background-secondary;
+      color: $text-secondary;
+    }
+
+    &--textarea {
+      height: 82px;
+      line-height: $line-height-spacious;
+    }
+
+    &--small {
+      font-size: $text-medium;
+    }
+  }
+
+  &__label {
+    color: $text-secondary;
+    padding-bottom: $spacing-tiny;
+  }
+
+  &__separator {
+    border-bottom: 1px solid $border;
+    padding-bottom: $spacing;
+  }
+}

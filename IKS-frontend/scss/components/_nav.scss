@@ -1,0 +1,22 @@
+.nav {
+  @include reset-list-style;
+
+  &-link {
+    align-items: center;
+    border-left: $thick solid transparent;
+    color: $text-secondary;
+    display: flex;
+    padding: 17px 0;
+    text-decoration: none;
+
+    &--active {
+      background: $background-site;
+      border-color: $active;
+      color: $active;
+    }
+
+    &__icon {
+      margin: 0 $spacing 0 25px;
+    }
+  }
+}

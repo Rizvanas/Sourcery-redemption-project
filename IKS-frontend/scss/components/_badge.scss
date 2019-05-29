@@ -1,0 +1,19 @@
+.badge {
+    align-items: center;
+    background-color: $white-ice;
+    border-radius: 10px;
+    color: $persian-green;
+    display: flex;
+    font-size: $text-tiny;
+    padding: 3px 13px;
+
+    &--admin {
+        background-color: $background-active;
+        color: $active;
+    }
+
+    &__icon {
+        margin-right: $spacing-tiny;
+    }
+
+}

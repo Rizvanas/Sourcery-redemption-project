@@ -1,16 +1,9 @@
 import React from "react";
-import "./assets/react-toolbox/theme.css";
 import { Router, Route } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import { Paper } from "@material-ui/core";
-import Sidebar from "./components/sidebar/Sidebar";
-import Header from "./components/header/Header";
-import Main from "./components/Main";
 import history from "./history";
 import Login from "./components/login/Login";
-import LoginSideBackground from "./components/login/LoginSide";
-import LoginSideBackground2 from "./components/login/LoginSide2";
-import LoginSideBackground3 from "./content/images/illustration.svg";
+import LoginSideBackground from "./content/images/illustration.svg";
 
 export default class App extends React.Component {
   constructor() {
@@ -28,8 +21,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { isAdmin } = this.state;
-
     return (
       <Router history={history}>
         <React.Fragment>
@@ -67,7 +58,7 @@ export default class App extends React.Component {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 backgroundRepeat: "no-repeat",
-                backgroundImage: `url(${LoginSideBackground3})`
+                backgroundImage: `url(${LoginSideBackground})`
               }}
             />
           </Grid>

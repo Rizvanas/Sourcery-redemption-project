@@ -1,0 +1,22 @@
+.tabs {
+
+    @include reset-list-style;
+    border-bottom: 1px solid $border;
+    display: flex;
+
+    &__link {
+
+        border-bottom: 2px solid transparent;
+        color: $text-secondary;
+        display: block;
+        padding: 16px $spacing-large;
+        text-decoration: none;
+
+        &--active {
+            border-color: $active;
+            color: $active;
+        }
+
+    }
+
+}

@@ -1,0 +1,18 @@
+.sidebar {
+  background: $background-contrast;
+  border-right: 1px solid $border;
+  color: $text-secondary;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+  justify-content: space-between;
+  width: $sidebar-width;
+
+  &__copyright {
+    font-size: $text-small;
+    padding: $spacing;
+    text-align: center;
+    width: 100%;
+  }
+}

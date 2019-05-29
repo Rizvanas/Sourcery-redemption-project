@@ -1,0 +1,34 @@
+.skill {
+    align-items: center;
+    display: flex;
+    font-size: $text-medium;
+    justify-content: space-between;
+    position: relative;
+    width: $skill-width + 2 * $skill-padding;
+
+    &--badge {
+        background: $background-secondary;
+        border-radius: $radius;
+        padding: $skill-padding;
+    }
+
+    &__stars {
+        display: flex;
+
+        &--input {
+            position: absolute;
+            right: $skill-padding;
+        }
+    }
+
+    &__star {
+        margin-left: $spacing-tiny;
+    }
+
+    &__input {
+        border: 1px solid $border;
+        border-radius: $radius;
+        padding: $skill-padding $skill-padding + 3 * $icon-size + 3 * $spacing-tiny $skill-padding $skill-padding;
+        width: 100%;
+    }
+}

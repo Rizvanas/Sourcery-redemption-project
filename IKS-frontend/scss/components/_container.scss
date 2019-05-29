@@ -1,0 +1,13 @@
+.container {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  padding: $spacing 85px 40px 40px;
+  width: 100%;
+
+  &__header {
+    flex: $logo-size + $spacing + 1;
+  }
+}

@@ -1,0 +1,34 @@
+.profile {
+
+    &__photos {
+        align-items: center;
+        display: flex;
+        position: relative;
+    }
+
+    &__photo {
+        left: $spacing-tiny;
+        position: absolute;
+        top: $spacing-tiny;
+    }
+
+    &__add-photo {
+        align-items: center;
+        background: $background-secondary;
+        border-radius: 50%;
+        display: flex;
+        height: $photo-circle-size;
+        justify-content: center;
+        margin-left: $spacing;
+        width: $photo-circle-size;
+    }
+
+    &__section {
+        position: relative;
+    }
+
+    &__separator {
+        border-bottom: 1px solid $border;
+    }
+
+}

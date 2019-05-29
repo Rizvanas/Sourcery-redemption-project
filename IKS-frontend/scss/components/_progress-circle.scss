@@ -1,0 +1,47 @@
+.progress-circle {
+    background-color: $border;
+    border-radius: 50%;
+    height: $progress-circle-size;
+    position: relative;
+    width: $progress-circle-size;
+
+    &:before {
+        @include flex-center;
+        align-items: center;
+        background-color: $background-contrast;
+        border-radius: 50%;
+        bottom: $progress-circle-thickness;
+        content: '';
+        left: $progress-circle-thickness;
+        position: absolute;
+        right: $progress-circle-thickness;
+        top: $progress-circle-thickness;
+    }
+
+    &:after {
+        background-color: $active;
+        background-image: linear-gradient(0deg, $active 50%, transparent 50%, transparent), linear-gradient(270deg, $active 50%, $border 50%, $border);
+        border-radius: 50%;
+        content: '';
+        display: inline-block;
+        height: 100%;
+        width: 100%;
+    }
+
+    &--full {
+
+        height: $progress-circle-size-small;
+        width: $progress-circle-size-small;
+
+        &:before {
+            bottom: $progress-circle-thickness-small;
+            left: $progress-circle-thickness-small;
+            right: $progress-circle-thickness-small;
+            top: $progress-circle-thickness-small;
+        }
+
+        &:after {
+            background-image: linear-gradient(0deg, $active 50%, transparent 50%, transparent);
+        }
+    }
+}

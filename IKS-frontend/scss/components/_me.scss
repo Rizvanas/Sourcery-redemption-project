@@ -1,0 +1,17 @@
+.me {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding: $spacing-main 0;
+    position: relative;
+
+    &__photo {
+        left: 7px;
+        position: absolute;
+        top: 7px;
+    }
+
+    &__name {
+        padding: $spacing-small 0;
+    }
+}

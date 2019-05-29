@@ -1,0 +1,40 @@
+$spacing: 15px;
+$spacing-large: 30px;
+$spacing-table-cell: 20px;
+$spacing-tiny: 5px;
+$spacing-small: 10px;
+$spacing-main: 50px;
+$radius: 4px;
+
+$line-height: 1;
+$line-height-spacious: 1.5;
+
+$font-size-base: 14px;
+$font-base: "Nunito", sans-serif;
+
+$text-medium: 13px;
+$text-small: 12px;
+$text-tiny: 11px;
+
+$thick: 3px;
+
+$skill-width: 400px;
+$skill-padding: $spacing-small;
+
+$icon-size: 20px;
+$icon-size-tiny: 12px;
+
+$table-cell-width: 27%;
+$table-cell-width-short: 50 - $table-cell-width;
+$table-cell-width-long: 100 - $table-cell-width;
+
+$logo-size: 30px;
+
+$progress-circle-thickness: $thick;
+$progress-circle-thickness-small: $progress-circle-thickness - 1;
+$progress-circle-size: 78px;
+$progress-circle-size-small: $progress-circle-size - 2 *
+  $progress-circle-thickness-small;
+$photo-circle-size: 64px; //fixme
+
+$sidebar-width: 220px;

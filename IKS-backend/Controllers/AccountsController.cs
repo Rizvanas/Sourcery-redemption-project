@@ -20,10 +20,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using My_IKS.Authentication.Extensions;
+using Microsoft.AspNetCore.Cors;
 
 namespace My_IKS.Controllers
 {
     [ApiController]
+    [EnableCors("CorsPolicy")]
     [Route("api/account")]
     public class AccountsController : ControllerBase
     {

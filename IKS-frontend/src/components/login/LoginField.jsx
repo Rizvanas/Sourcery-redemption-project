@@ -1,24 +1,68 @@
 import React from "react";
+import { Field } from "redux-form";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import { connect } from "react-redux";
 
 class FormField extends React.Component {
-  render() {
-    const { placeholder, name, title, type } = this.props;
+  renderInput = ({
+    input,
+    meta,
+    name,
+    title,
+    type,
+    placeholder,
+    message,
+    displayErr
+  }) => {
     return (
-      <div className="form__row form__field">
+      <FormControl
+        className="form__row form__field"
+        error={
+          (meta.error !== undefined && meta.touched) || message !== undefined
+        }
+      >
+        {message !== undefined && displayErr !== undefined ? (
+          <FormHelperText>{message}</FormHelperText>
+        ) : null}
         <label htmlFor={name} className="form__label">
           {title}
         </label>
         <input
-          component="input"
-          placeholder={placeholder}
           className="form__input form__input-wrapper"
-          name={name}
-          type={type}
           style={{ height: "50px", width: "422px" }}
+          {...input}
+          type={type}
+          placeholder={placeholder}
         />
-      </div>
+        {meta.touched && meta.error !== undefined ? (
+          <FormHelperText>{meta.error}</FormHelperText>
+        ) : null}
+      </FormControl>
+    );
+  };
+
+  render() {
+    const { placeholder, name, title, type, message, displayErr } = this.props;
+    return (
+      <Field
+        component={this.renderInput}
+        placeholder={placeholder}
+        name={name}
+        type={type}
+        title={title}
+        message={message}
+        displayErr={displayErr}
+      />
     );
   }
 }
 
-export default FormField;
+const mapStateToProps = state => {
+  return { message: state.auth.message };
+};
+
+export default connect(
+  mapStateToProps,
+  {}
+)(FormField);

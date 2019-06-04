@@ -12,6 +12,7 @@
     "faker": "^4.1.0",
     "history": "^4.9.0",
     "jquery": "3.4.0",
+    "jsonwebtoken": "^8.5.1",
     "material-ui-next-pickers": "0.0.20",
     "material-ui-pickers": "^2.2.4",
     "node-sass": "^4.11.0",

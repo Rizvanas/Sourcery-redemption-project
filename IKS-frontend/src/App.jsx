@@ -24,7 +24,7 @@ export default class App extends React.Component {
       <Router history={history}>
         <React.Fragment>
           <Route exact path="/login" component={Login} />
-          <div cla="container">
+          <div>
             <Main />
           </div>
         </React.Fragment>

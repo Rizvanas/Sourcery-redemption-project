@@ -16,7 +16,7 @@ namespace My_IKS.Controllers
 {   
     [Route("api/users")]
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;

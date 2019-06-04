@@ -9,7 +9,7 @@ import {
 
 export const fetchUserProfile = () => async dispatch => {
   try {
-    const response = await axios.get("https://localhost:5001/api/profile", {
+    const response = await axios.get("http://localhost:62727/api/profile", {
       withCredentials: true
     });
     dispatch({ type: USER_PROFILE_FETCH_SUCCESS, user: response.data });
@@ -26,7 +26,6 @@ export const login = formProps => async dispatch => {
     await axios.post("http://localhost:62727/api/account/login", formProps, {
       withCredentials: true
     });
-    fetchUserProfile();
     dispatch({ type: AUTH_SUCCESS });
   } catch (error) {
     dispatch({ type: AUTH_FAILURE, message: error.response.data.message });

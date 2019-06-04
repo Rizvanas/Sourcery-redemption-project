@@ -12,7 +12,7 @@ import SlackButton from "../general/SlackButton";
 import PrimaryButton from "../general/PrimaryButton";
 import LoginField from "./LoginField";
 import RegisterLink from "./RegisterLink";
-import { login, fetchUserProfile } from "../../actions/index";
+import { login } from "../../actions/index";
 
 const validate = values => {
   const errors = {};
@@ -27,7 +27,7 @@ const validate = values => {
 
 class LoginForm extends React.Component {
   onSubmit = formProps => {
-    this.props.fetchUserProfile();
+    this.props.login(formProps);
   };
 
   render() {
@@ -95,7 +95,7 @@ LoginForm.propTypes = {
 export default compose(
   connect(
     null,
-    { fetchUserProfile }
+    { login }
   ),
   withStyles(loginStyles),
   reduxForm({ form: "login", destroyOnUnmount: false, validate })

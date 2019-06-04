@@ -18,11 +18,9 @@ class FormField extends React.Component {
     return (
       <FormControl
         className="form__row form__field"
-        error={
-          (meta.error !== undefined && meta.touched) || message !== undefined
-        }
+        error={(meta.error && meta.touched) || message}
       >
-        {message !== undefined && displayErr !== undefined ? (
+        {message && displayErr ? (
           <FormHelperText>{message}</FormHelperText>
         ) : null}
         <label htmlFor={name} className="form__label">
@@ -35,7 +33,7 @@ class FormField extends React.Component {
           type={type}
           placeholder={placeholder}
         />
-        {meta.touched && meta.error !== undefined ? (
+        {meta.touched && meta.error ? (
           <FormHelperText>{meta.error}</FormHelperText>
         ) : null}
       </FormControl>

@@ -9,8 +9,8 @@ export default function (state = INITIAL_STATE, action) {
     case AUTH_SUCCESS:
       return {
         ...state,
-        isAuthenticated: action.user !== null,
-        user: action.user
+        isAuthenticated: true,
+        message: null
       };
     case AUTH_FAILURE:
       return {

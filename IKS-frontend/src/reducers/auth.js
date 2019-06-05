@@ -1,4 +1,8 @@
-import { AUTH_SUCCESS, AUTH_FAILURE } from "../actions/constants";
+import {
+  AUTH_SUCCESS,
+  AUTH_FAILURE,
+  USER_PROFILE_FETCH_SUCCESS
+} from "../actions/constants";
 
 const INITIAL_STATE = {
   isAuthenticated: false,
@@ -12,11 +16,19 @@ export default function (state = INITIAL_STATE, action) {
         isAuthenticated: true,
         message: null
       };
+
     case AUTH_FAILURE:
       return {
         ...state,
         isAuthenticated: false,
         message: action.message
+      };
+
+    case USER_PROFILE_FETCH_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: action.user !== null,
+        user: action.user
       };
     default:
       return state;

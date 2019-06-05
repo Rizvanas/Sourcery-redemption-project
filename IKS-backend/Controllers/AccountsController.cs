@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using My_IKS.Data.DTO.Requests;
 using Microsoft.AspNetCore.Identity;
 using My_IKS.Data.Domain;
-using My_IKS.Data.Repositories;
 using System.Text;
-using Microsoft.Extensions.Options;
-using My_IKS.Persistance.Configurations;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -47,7 +43,7 @@ namespace My_IKS.Controllers
             }
             catch
             {
-                return Conflict();
+                return Conflict(new { message = "Email or password already in use" });
             }
         }
 

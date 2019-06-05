@@ -2,6 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import loginStyles from "../../utils/loginStyles";
 import SlackIcon from "../login/icons/SlackIcon";
 
@@ -9,6 +10,8 @@ const SlackButton = props => {
   const { classes } = props;
   return (
     <Button
+      to="/header"
+      component={Link}
       fullWidth
       type="button"
       color="secondary"
@@ -17,7 +20,6 @@ const SlackButton = props => {
         root: classes.buttonRoot,
         label: classes.buttonLabel
       }}
-      disabled
     >
       <SlackIcon />
       Login via Slack

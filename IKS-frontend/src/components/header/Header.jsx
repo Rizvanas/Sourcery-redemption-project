@@ -1,16 +1,10 @@
 import React from "react";
-import { connect } from "react-redux";
-import { fetchUserProfile } from "../../actions";
+import requireAuth from "../../utils/requireAuth";
 
-const Header = () => <div>HEADER!</div>;
+class Header extends React.Component {
+  render() {
+    return <div>HEADER!</div>;
+  }
+}
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  { fetchUserProfile }
-)(Header);
+export default requireAuth(Header);

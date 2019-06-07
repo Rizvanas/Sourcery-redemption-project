@@ -4,11 +4,13 @@ import {
   AUTH_SUCCESS,
   AUTH_FAILURE,
   USER_PROFILE_FETCH_SUCCESS,
-  USER_PROFILE_FETCH_FAILURE
+  USER_PROFILE_FETCH_FAILURE,
+  IS_LOADING
 } from "./constants";
 
 export const fetchUserProfile = () => async dispatch => {
   try {
+    dispatch({ type: IS_LOADING });
     const response = await axios.get("http://localhost:62727/api/profile", {
       withCredentials: true
     });
@@ -23,6 +25,7 @@ export const fetchUserProfile = () => async dispatch => {
 
 export const login = formProps => async dispatch => {
   try {
+    dispatch({ type: IS_LOADING });
     await axios.post("http://localhost:62727/api/account/login", formProps, {
       withCredentials: true
     });

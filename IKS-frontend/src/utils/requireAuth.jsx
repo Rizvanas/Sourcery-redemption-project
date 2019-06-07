@@ -1,28 +1,28 @@
 import React from "react";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
-import { fetchUserProfile } from "../actions";
+import { connect } from "react-redux";
 
-export default ChildComponent => {
+export default (ChildComponent, mapStateToProps, actionCreator) => {
   class ComposedComponent extends React.Component {
     componentDidMount() {
-      this.props.fetchUserProfile();
+      this.props.actionCreator();
     }
 
     render() {
-      const { isAuthenticated } = this.props;
-      if (!isAuthenticated) {
-        return <Redirect to="/login" />;
+      const { isAuthenticated, isLoading } = this.props;
+      if (isLoading) {
+        return <div>Loading...</div>;
       }
-      return <ChildComponent {...this.props} />;
+      return !isAuthenticated ? (
+        <Redirect to="/login" />
+      ) : (
+        <ChildComponent {...this.props} />
+      );
     }
-  }
-  function mapStateToProps(state) {
-    return { isAuthenticated: state.auth.isAuthenticated };
   }
 
   return connect(
     mapStateToProps,
-    { fetchUserProfile }
+    { actionCreator }
   )(ComposedComponent);
 };

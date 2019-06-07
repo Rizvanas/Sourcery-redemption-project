@@ -57,7 +57,9 @@ class FormField extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { message: state.auth.message };
+  return {
+    message: state.auth.message
+  };
 };
 
 export default connect(

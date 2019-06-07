@@ -10,7 +10,7 @@ const SlackButton = props => {
   const { classes } = props;
   return (
     <Button
-      to="/header"
+      to="/"
       component={Link}
       fullWidth
       type="button"

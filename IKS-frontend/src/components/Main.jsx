@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Header from "./header/Header";
 
 class MainComponent extends React.Component {
@@ -7,7 +7,7 @@ class MainComponent extends React.Component {
     return (
       <React.Fragment>
         <main className="main">
-          <Route path="/header" component={Header} />
+          <Route exact path="/" component={Header} />
         </main>
       </React.Fragment>
     );

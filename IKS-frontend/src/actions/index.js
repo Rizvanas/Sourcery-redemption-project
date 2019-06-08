@@ -5,6 +5,8 @@ import {
   AUTH_FAILURE,
   USER_PROFILE_FETCH_SUCCESS,
   USER_PROFILE_FETCH_FAILURE,
+  SIGNUP_SUCCESS,
+  SIGNUP_FAILURE,
   IS_LOADING
 } from "./constants";
 
@@ -32,5 +34,17 @@ export const login = formProps => async dispatch => {
     dispatch({ type: AUTH_SUCCESS });
   } catch (error) {
     dispatch({ type: AUTH_FAILURE, message: error.response.data.message });
+  }
+};
+
+export const signup = formProps => async dispatch => {
+  try {
+    const response = await axios.post(
+      "http://localhost:62727/api/account/register",
+      formProps
+    );
+    dispatch({ type: SIGNUP_SUCCESS });
+  } catch (error) {
+    dispatch({ type: SIGNUP_FAILURE });
   }
 };

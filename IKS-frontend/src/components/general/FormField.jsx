@@ -3,6 +3,9 @@ import { Field } from "redux-form";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import { connect } from "react-redux";
+import { withStyles } from "@material-ui/core";
+import { compose } from "redux";
+import loginStyles from "../../utils/loginStyles";
 
 class FormField extends React.Component {
   renderInput = ({
@@ -13,11 +16,12 @@ class FormField extends React.Component {
     type,
     placeholder,
     message,
-    displayErr
+    displayErr,
+    inputFieldStyle
   }) => {
     return (
       <FormControl
-        className="form__row form__field"
+        className="form__field"
         error={(meta.error && meta.touched) || message}
       >
         {message && displayErr ? (
@@ -27,8 +31,8 @@ class FormField extends React.Component {
           {title}
         </label>
         <input
-          className="form__input form__input-wrapper"
-          style={{ height: "50px", width: "422px" }}
+          className="form__input"
+          style={inputFieldStyle}
           {...input}
           type={type}
           placeholder={placeholder}
@@ -41,7 +45,15 @@ class FormField extends React.Component {
   };
 
   render() {
-    const { placeholder, name, title, type, message, displayErr } = this.props;
+    const {
+      placeholder,
+      name,
+      title,
+      type,
+      message,
+      displayErr,
+      inputFieldStyle
+    } = this.props;
     return (
       <Field
         component={this.renderInput}
@@ -50,6 +62,7 @@ class FormField extends React.Component {
         type={type}
         title={title}
         message={message}
+        inputFieldStyle={inputFieldStyle}
         displayErr={displayErr}
       />
     );
@@ -62,7 +75,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {}
+export default compose(
+  connect(mapStateToProps),
+  withStyles(loginStyles)
 )(FormField);

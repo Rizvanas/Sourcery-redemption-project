@@ -9,6 +9,7 @@ import registerServiceWorker from "./registerServiceWorker";
 import reducers from "./reducers";
 import history from "./history";
 import Login from "./components/login/Login";
+import Signup from "./components/signup/Signup";
 
 const rootElement = document.getElementById("root");
 const store = createStore(reducers, applyMiddleware(reduxThunk));
@@ -17,6 +18,7 @@ ReactDOM.render(
   <Router history={history}>
     <Provider store={store}>
       <Route exact path="/login" component={Login} />
+      <Route exact path="/signup" component={Signup} />
       <App />
     </Provider>
   </Router>,

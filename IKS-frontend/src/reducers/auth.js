@@ -41,6 +41,7 @@ export default function (state = INITIAL_STATE, action) {
         user: action.user,
         isLoading: false
       };
+
     default:
       return state;
   }

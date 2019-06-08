@@ -1,18 +1,15 @@
 import React from "react";
 import { withStyles } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import Grid from "@material-ui/core/Grid";
-import PropTypes from "prop-types";
-import { reduxForm, Field } from "redux-form";
+import { reduxForm } from "redux-form";
 import { connect } from "react-redux";
 import { compose } from "redux";
 import loginStyles from "../../utils/loginStyles";
-import LoginHeader from "./LoginHeader";
 import SlackButton from "../general/SlackButton";
 import PrimaryButton from "../general/PrimaryButton";
-import LoginField from "../general/FormField";
-import RegisterLink from "../general/FormLink";
-import { login } from "../../actions/index";
+import SignupField from "../general/FormField";
+import LoginLink from "../general/FormLink";
+import { signup } from "../../actions/index";
+import SignupHeader from "./SignupHeader";
 
 const validate = values => {
   const errors = {};
@@ -25,14 +22,14 @@ const validate = values => {
   return errors;
 };
 
-class LoginForm extends React.Component {
+class SignupForm extends React.Component {
   onSubmit = formProps => {
-    this.props.login(formProps);
+    this.props.signup(formProps);
   };
 
   render() {
     const { handleSubmit, submitting } = this.props;
-    const { inputField } = loginStyles;
+    const { inputField, smallInputField } = loginStyles;
     return (
       <div className="container main profile__section section">
         <form
@@ -40,61 +37,65 @@ class LoginForm extends React.Component {
           onSubmit={handleSubmit(this.onSubmit)}
           style={{ padding: "50px 0 0 50px" }}
         >
-          <LoginHeader />
+          <SignupHeader />
           <div className="form__row" style={{ width: "432px" }}>
-            <LoginField
+            <SignupField
+              type="text"
+              name="name"
+              title="Name"
+              placeholder="First Name"
+              inputFieldStyle={smallInputField}
+              displayErr
+            />
+            <SignupField
+              type="text"
+              name="surname"
+              title="Surname"
+              placeholder="Last Name"
+              inputFieldStyle={smallInputField}
+            />
+          </div>
+          <div className="form__row" style={{ width: "432px" }}>
+            <SignupField
               type="email"
               name="email"
               title="Email address"
               placeholder="Enter your email address"
               inputFieldStyle={inputField}
-              displayErr
             />
           </div>
-          <div className="form__row" style={{ width: "432px" }}>
-            <LoginField
+
+          <div className="form__row form__row--last" style={{ width: "432px" }}>
+            <SignupField
               type="password"
               name="password"
               title="Password"
-              inputFieldStyle={inputField}
+              inputFieldStyle={smallInputField}
               placeholder="Enter password"
             />
-          </div>
-          <div
-            className="form__row form__input-wrapper"
-            style={{ paddingBottom: "50px", width: "422px" }}
-          >
-            <Grid container>
-              <Grid item xs>
-                <Field name="rememberMe" component="input" type="checkbox" />
-                <label className="form__label">&nbsp; Remember me</label>
-              </Grid>
-              <Grid item>
-                <Link
-                  to="/"
-                  className="tabs__link--active"
-                  style={{ textDecoration: "none" }}
-                >
-                  Forgot password?
-                </Link>
-              </Grid>
-            </Grid>
+            <SignupField
+              type="password"
+              name="confirm"
+              title="Confirm password"
+              inputFieldStyle={smallInputField}
+              placeholder="Enter password"
+            />
           </div>
 
           <div
             className="form__row form__input-wrapper"
             style={{ paddingBottom: "10px" }}
           >
-            <PrimaryButton disabled={submitting} text="Login" />
+            <PrimaryButton disabled={submitting} text="Sign up" />
           </div>
 
           <div className="form__row form__row--last form__input-wrapper">
-            <SlackButton text="Login via Slack" />
+            <SlackButton text="Sign up via Slack" />
           </div>
-          <RegisterLink
-            title="Create account"
-            text="Don&#39;t have an account yet?"
-            to="/signup"
+          <LoginLink
+            title="Log in"
+            text="Have an account already?"
+            to="login"
           />
         </form>
       </div>
@@ -102,15 +103,11 @@ class LoginForm extends React.Component {
   }
 }
 
-LoginForm.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
 export default compose(
   connect(
     null,
-    { login }
+    { signup }
   ),
   withStyles(loginStyles),
   reduxForm({ form: "login", destroyOnUnmount: false, validate })
-)(LoginForm);
+)(SignupForm);

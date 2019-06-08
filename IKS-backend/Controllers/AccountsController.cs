@@ -2,47 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 using My_IKS.Data.DTO.Requests;
 using Microsoft.AspNetCore.Identity;
 using My_IKS.Data.Domain;
-using My_IKS.Persistance.Repositories;
-using My_IKS.Data.Repositories;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using System.Text;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.Extensions.Options;
-using My_IKS.Persistance.Configurations;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using My_IKS.Authentication.Extensions;
+using Microsoft.AspNetCore.Cors;
 
 namespace My_IKS.Controllers
 {
-    [ApiController]
     [Route("api/account")]
+    [EnableCors("CorsPolicy")]
     public class AccountsController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IUserRepository _userRepository;
-        private readonly ApplicationSettings _appSettings;
         private readonly IMapper _mapper;
 
         public AccountsController(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IUserRepository userRepository,
-            IOptions<ApplicationSettings> appSettings,
             IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _userRepository = userRepository;
-            _appSettings = appSettings.Value;
             _mapper = mapper;
         }
 
@@ -50,44 +34,61 @@ namespace My_IKS.Controllers
         public async Task<IActionResult> Register([FromBody] UserRegisterRequest registerRequest)
         {
             var user = _mapper.Map<User>(registerRequest);
+            var result = await _userManager.CreateAsync(user, registerRequest.Password);
 
-            try
+            if(result.Succeeded)
             {
-                var result = await _userManager.CreateAsync(user, registerRequest.Password);
-                await _userManager.AddToRoleAsync(user, registerRequest.Role);
+                await addUserRoleAsync(user);
                 return Ok(result);
             }
-            catch
-            {
-                return Conflict();
-            }
+
+            return Conflict(new { errors = result.Errors });
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest loginRequest)
-        {
-            await _signInManager.SignOutAsync();
-            var user = await _userManager.FindByEmailAsync(loginRequest.Email);
-            var signInResult = await _signInManager.PasswordSignInAsync(user, loginRequest.Password, true, true);
-            
-            if(signInResult.Succeeded)
-            {   
-                var roles = await _userManager.GetRolesAsync(user);   
-                return Ok(new { token = user.GenerateJwtToken(roles, _appSettings.JWTSecret) });
-            }
-            else
+        {   
+            try
             {
-                return BadRequest(new { message = "Email or password is incorrect." });
+                await _signInManager.SignOutAsync();
+                var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+                var signInResult = await _signInManager.PasswordSignInAsync(user,
+                    loginRequest.Password,
+                    loginRequest.RememberMe, true);
+
+                if (signInResult.Succeeded)
+                {
+                    return Ok();
+                }
+
+                return Unauthorized(new { message = "Email or password is incorrect." });
             }
+            catch
+            {
+                return Unauthorized(new { message = "Email or password is incorrect." });
+            }
+
         }
 
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
 
             return NoContent();
+        }
+
+        private async Task<IdentityResult> addUserRoleAsync(User user)
+        {
+            if(user.Email.ToLowerInvariant().Contains("admin"))
+            {
+                return await _userManager.AddToRoleAsync(user, "Admin");
+            }
+            else
+            {
+                return await _userManager.AddToRoleAsync(user, "User");
+            }
         }
     }
 }

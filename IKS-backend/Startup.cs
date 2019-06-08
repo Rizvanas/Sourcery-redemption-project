@@ -22,6 +22,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using My_IKS.Persistance.Configurations;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace My_IKS
 {
@@ -34,7 +38,6 @@ namespace My_IKS
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
 
@@ -46,6 +49,16 @@ namespace My_IKS
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                        .WithOrigins("http://localhost:3000")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
@@ -54,17 +67,6 @@ namespace My_IKS
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<IKSContext>()
                 .AddDefaultTokenProviders();
-
-            services.ConfigureApplicationCookie(options =>
-            {
-                options.LoginPath = "/account/login";
-            });
-
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<ISkillRepository, SkillRepository>();
-            services.AddScoped<IGoalRepository, GoalRepository>();
 
             services.Configure<IdentityOptions>(options =>
             {
@@ -82,58 +84,69 @@ namespace My_IKS
                 options.User.RequireUniqueEmail = true;
             });
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
+
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.Domain = null;
+                options.Cookie.HttpOnly = true;
                 options.LoginPath = "/account/login";
+                options.AccessDeniedPath = "/account/login";
+                options.SlidingExpiration = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-            });
+                options.Cookie.SameSite = Microsoft.AspNetCore.Http.SameSiteMode.None;
 
-           
-            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWTSecret"].ToString());
-            services.AddAuthentication()
-            .AddJwtBearer(options => 
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
-                options.TokenValidationParameters = new TokenValidationParameters
+                options.Events.OnRedirectToLogin = context =>
                 {
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero
+                  if (context.Request.Path.StartsWithSegments("/api") && context.Response.StatusCode == StatusCodes.Status200OK)
+                  {
+                      context.Response.Clear();
+                      context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                      return Task.FromResult<Object>(null);
+                  }
+                  context.Response.Redirect(context.RedirectUri);
+                  return Task.FromResult<Object>(null);
                 };
-            });
-           
 
-            services.AddCors();
+
+                options.Events.OnRedirectToAccessDenied = context =>
+                {
+                    if (context.Request.Path.StartsWithSegments("/api") && context.Response.StatusCode == StatusCodes.Status200OK)
+                    {
+                        context.Response.Clear();
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                        return Task.FromResult<Object>(null);
+                    }
+                    
+                    context.Response.Redirect(context.RedirectUri);
+                    return Task.FromResult<Object>(null);
+                };
+                
+            });
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<ISkillRepository, SkillRepository>();
+            services.AddScoped<IGoalRepository, GoalRepository>();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors
-            (
-               builder => builder
-               .WithOrigins(Configuration["ApplicationSettings:ClientURL"].ToString())
-               .AllowAnyHeader()
-               .AllowAnyMethod()
-            );
-            app.UseAuthentication();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-           
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseCors("CorsPolicy");
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

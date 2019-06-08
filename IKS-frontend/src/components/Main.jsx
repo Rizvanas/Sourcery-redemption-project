@@ -1,12 +1,17 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route } from "react-router-dom";
+import Header from "./header/Header";
 
-export default class MainComponent extends React.Component {
+class MainComponent extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <main className="main" />
+        <main className="main">
+          <Route exact path="/" component={Header} />
+        </main>
       </React.Fragment>
     );
   }
 }
+
+export default MainComponent;

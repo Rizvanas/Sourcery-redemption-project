@@ -1,31 +1,30 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import Grid from "@material-ui/core/Grid";
 import loginStyles from "../../utils/loginStyles";
-import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
 
-class Login extends React.Component {
+class Register extends React.Component {
   render() {
-    const { isAuthenticated } = this.props;
+    const { isRegistered } = this.props;
     const { gridContainer, gridItem } = loginStyles;
-    return !isAuthenticated ? (
+    return !isRegistered ? (
       <Grid container spacing={0} styles={gridContainer}>
         <Grid item xs={12} sm={10} md={6} lg={5} xl={4}>
-          <LoginForm />
+          <SignupForm />
         </Grid>
         <Grid item xs={false} sm={2} md={6} lg={7} xl={8} style={gridItem} />
       </Grid>
     ) : (
-      <Redirect to="/" />
+      <Redirect to="/login" />
     );
   }
 }
-
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.isAuthenticated
+    isRegistered: state.signup.isRegistered
   };
 };
 
-export default connect(mapStateToProps)(Login);
+export default connect(mapStateToProps)(Register);

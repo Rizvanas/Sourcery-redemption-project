@@ -1,4 +1,4 @@
-import LoginSideBackground from "../content/images/illustration.svg";
+import SideBackground from "../content/images/illustration.svg";
 
 export default {
   buttonRoot: {
@@ -10,8 +10,12 @@ export default {
     fontFamily: "Nunito",
     fontSize: "15px"
   },
-  inputRoot: {
+  inputField: {
     width: "422px",
+    height: "50px"
+  },
+  smallInputField: {
+    width: "206px",
     height: "50px"
   },
   gridContainer: {
@@ -24,6 +28,6 @@ export default {
     backgroundSize: "cover",
     backgroundPosition: "center",
     backgroundRepeat: "no-repeat",
-    backgroundImage: `url(${LoginSideBackground})`
+    backgroundImage: `url(${SideBackground})`
   }
 };

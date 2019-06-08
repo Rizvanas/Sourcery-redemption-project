@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using My_IKS.Data;
@@ -9,15 +9,17 @@ using My_IKS.Data.DTO.General;
 using My_IKS.Data.DTO.Requests;
 using My_IKS.Data.Repositories;
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace My_IKS.Controllers
 {
-    [ApiController]
+    [Authorize]
     [Route("api/profile")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [EnableCors("CorsPolicy")]
     public class ProfileController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -36,19 +38,19 @@ namespace My_IKS.Controllers
         [HttpGet]
         public async Task<ActionResult<UserProfile>> GetUserProfile()
         {
-            string userId = User.Claims.First(c => c.Type == "UserId").Value;
-            var user = await _userManager.FindByIdAsync(userId);
-                
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Value;
+
             return Ok(_mapper.Map<UserProfile>(user));
         }
 
         [HttpPut("edit")]
         public async Task<IActionResult> EditUserProfile([FromBody] UserProfile userProfileRequest)
         {
-            var userId = User.Claims.First(c => c.Type == "UserId").Value;
-            var user = await _userManager.FindByIdAsync(userId);
-            _mapper.Map(userProfileRequest, user);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Value;
 
+            _mapper.Map(userProfileRequest, user);
             await _unitOfWork.CompleteAsync();
 
             return Ok();
@@ -57,7 +59,7 @@ namespace My_IKS.Controllers
         [HttpPut("skills/{skillId}/edit")]
         public async Task<IActionResult> EditUserSkill(int skillId, [FromBody] SkillUpdateRequest updateRequest)
         {
-            var userId = User.Claims.First(c => c.Type == "UserId").Value;
+            var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
 
             _mapper.Map(updateRequest, user.UserSkills.Find(us => us.SkillId == skillId));
@@ -69,7 +71,7 @@ namespace My_IKS.Controllers
         [HttpDelete("skills/{skillId}")]
         public async Task<IActionResult> DeleteUserSkill(int skillId)
         {
-            var userId = User.Claims.First(c => c.Type == "UserId").Value;
+            var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
 
             user.UserSkills.Remove(user.UserSkills.Find(us => us.SkillId == skillId));
@@ -81,7 +83,7 @@ namespace My_IKS.Controllers
         [HttpPost("skills")]
         public async Task<IActionResult> AddUserSkill([FromBody] SkillAddRequest addRequest)
         {
-            var userId = User.Claims.First(c => c.Type == "UserId").Value;
+            var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
 
             user.UserSkills.Add(new UserSkill
@@ -100,7 +102,7 @@ namespace My_IKS.Controllers
         [HttpPut("goals/{goalId}/edit")]
         public async Task<IActionResult> EditUserGoal(int goalId, GoalUpdateRequest updateRequest)
         {
-            var userId = User.Claims.First(c => c.Type == "UserId").Value;
+            var userId = _userManager.GetUserId(HttpContext.User);
             var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
 
             _mapper.Map(updateRequest, user.Goals.Find(g => g.GoalId == goalId));
@@ -114,7 +116,7 @@ namespace My_IKS.Controllers
         {
             try
             {
-                var userId = User.Claims.First(c => c.Type == "UserId").Value;
+                var userId = _userManager.GetUserId(HttpContext.User);
                 var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
 
                 user.Goals.Remove(user.Goals.Find(g => g.GoalId == goalId));
@@ -133,7 +135,7 @@ namespace My_IKS.Controllers
         {
             try
             {
-                var userId = User.Claims.First(c => c.Type == "UserId").Value;
+                var userId = _userManager.GetUserId(HttpContext.User);
                 var user = await _userRepository.GetUserAsync(Int32.Parse(userId));
 
                 var goal = _mapper.Map<Goal>(addRequest);
@@ -141,7 +143,6 @@ namespace My_IKS.Controllers
                 goal.Requests = user.Goals.Count;
                 user.Goals.Add(goal);
                 await _unitOfWork.CompleteAsync();
-
             }
             catch
             {

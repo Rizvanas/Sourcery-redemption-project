@@ -1,5 +1,5 @@
 import React from "react";
-import DBLogo from "./icons/DBLogo";
+import DBLogo from "../general/icons/DBLogo";
 
 export default () => (
   <React.Fragment>

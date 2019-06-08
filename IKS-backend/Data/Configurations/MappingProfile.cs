@@ -13,11 +13,13 @@ namespace My_IKS.Data
     {
         public MappingProfile()
         {
-            CreateMap<UserRegisterRequest, User>().AfterMap((src, dest) => 
-            {
-                if (dest.Location == null)
-                    dest.Location = "Unknown";
-            });
+            CreateMap<UserRegisterRequest, User>()
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src=> src.Email))
+                .AfterMap((src, dest) => 
+                {
+                    if (dest.Location == null)
+                        dest.Location = "Unknown";
+                });
 
             CreateMap<User, UserIntroResponse>()
                 .ForMember(dest => dest.SkillTitles, 

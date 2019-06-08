@@ -5,12 +5,13 @@ import PropTypes from "prop-types";
 import loginStyles from "../../utils/loginStyles";
 
 const PrimaryButton = props => {
-  const { classes, text } = props;
+  const { classes, text, disabled } = props;
   return (
     <Button
       className="button button--primary button--spaced"
       type="submit"
       color="primary"
+      disabled={disabled}
       classes={{
         root: classes.buttonRoot,
         label: classes.buttonLabel

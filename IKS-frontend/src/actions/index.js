@@ -39,10 +39,7 @@ export const login = formProps => async dispatch => {
 
 export const signup = formProps => async dispatch => {
   try {
-    const response = await axios.post(
-      "http://localhost:62727/api/account/register",
-      formProps
-    );
+    await axios.post("http://localhost:62727/api/account/register", formProps);
     dispatch({ type: SIGNUP_SUCCESS });
   } catch (error) {
     dispatch({ type: SIGNUP_FAILURE });

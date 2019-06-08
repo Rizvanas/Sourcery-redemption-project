@@ -8,7 +8,8 @@ import {
 const INITIAL_STATE = {
   isAuthenticated: false,
   user: {},
-  isLoading: true
+  isLoading: true,
+  message: null
 };
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -16,7 +17,6 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         isAuthenticated: true,
-        message: null,
         isLoading: false
       };
 

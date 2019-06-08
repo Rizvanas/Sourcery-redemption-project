@@ -1,21 +1,21 @@
 import { SIGNUP_SUCCESS, SIGNUP_FAILURE } from "../actions/constants";
 
 const INITIAL_STATE = {
-  isRegistered: false
+  isRegistered: false,
+  message: null
 };
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case SIGNUP_SUCCESS:
       return {
-        ...state,
-        isRegistered: true
+        isRegistered: action.succeeded
       };
 
     case SIGNUP_FAILURE:
       return {
-        ...state,
-        isRegistered: false
+        isRegistered: false,
+        message: action.errors.map(err => err.description)[0]
       };
 
     default:

@@ -15,18 +15,28 @@ class FormField extends React.Component {
     title,
     type,
     placeholder,
-    message,
+    authMessage,
+    signupMessage,
     displayErr,
     inputFieldStyle
   }) => {
     return (
       <FormControl
         className="form__field"
-        error={(meta.error && meta.touched) || message}
+        error={
+          (meta.error && meta.touched) ||
+          authMessage !== null ||
+          signupMessage !== null
+        }
       >
-        {message && displayErr ? (
-          <FormHelperText>{message}</FormHelperText>
+        {authMessage && displayErr ? (
+          <FormHelperText>{authMessage}</FormHelperText>
         ) : null}
+
+        {signupMessage && displayErr ? (
+          <FormHelperText>{signupMessage}</FormHelperText>
+        ) : null}
+
         <label htmlFor={name} className="form__label">
           {title}
         </label>
@@ -50,7 +60,8 @@ class FormField extends React.Component {
       name,
       title,
       type,
-      message,
+      authMessage,
+      signupMessage,
       displayErr,
       inputFieldStyle
     } = this.props;
@@ -61,7 +72,8 @@ class FormField extends React.Component {
         name={name}
         type={type}
         title={title}
-        message={message}
+        authMessage={authMessage}
+        signupMessage={signupMessage}
         inputFieldStyle={inputFieldStyle}
         displayErr={displayErr}
       />
@@ -71,7 +83,8 @@ class FormField extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    message: state.auth.message
+    authMessage: state.auth.message,
+    signupMessage: state.signup.message
   };
 };
 

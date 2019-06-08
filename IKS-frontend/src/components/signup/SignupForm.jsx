@@ -19,6 +19,15 @@ const validate = values => {
   if (!values.password) {
     errors.password = "Required";
   }
+  if (!values.firstName) {
+    errors.firstName = "Required";
+  }
+  if (!values.lastName) {
+    errors.lastName = "Required";
+  }
+  if (values.confirm !== values.password) {
+    errors.confirm = "Must match password";
+  }
   return errors;
 };
 
@@ -41,7 +50,7 @@ class SignupForm extends React.Component {
           <div className="form__row" style={{ width: "432px" }}>
             <SignupField
               type="text"
-              name="name"
+              name="firstName"
               title="Name"
               placeholder="First Name"
               inputFieldStyle={smallInputField}
@@ -49,7 +58,7 @@ class SignupForm extends React.Component {
             />
             <SignupField
               type="text"
-              name="surname"
+              name="lastName"
               title="Surname"
               placeholder="Last Name"
               inputFieldStyle={smallInputField}
@@ -109,5 +118,5 @@ export default compose(
     { signup }
   ),
   withStyles(loginStyles),
-  reduxForm({ form: "login", destroyOnUnmount: false, validate })
+  reduxForm({ form: "signup", destroyOnUnmount: false, validate })
 )(SignupForm);

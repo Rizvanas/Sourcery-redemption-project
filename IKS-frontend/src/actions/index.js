@@ -1,7 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import axios from "axios";
 import backend from "../axios/config";
-
 import {
   AUTH_SUCCESS,
   AUTH_FAILURE,

@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import axios from "axios";
+import backend from "../axios/config";
+
 import {
   AUTH_SUCCESS,
   AUTH_FAILURE,
@@ -13,9 +15,7 @@ import {
 export const fetchUserProfile = () => async dispatch => {
   try {
     dispatch({ type: IS_LOADING });
-    const response = await axios.get("http://localhost:62727/api/profile", {
-      withCredentials: true
-    });
+    const response = await backend.get("/profile");
     dispatch({ type: USER_PROFILE_FETCH_SUCCESS, user: response.data });
   } catch (error) {
     dispatch({
@@ -28,9 +28,7 @@ export const fetchUserProfile = () => async dispatch => {
 export const login = formProps => async dispatch => {
   try {
     dispatch({ type: IS_LOADING });
-    await axios.post("http://localhost:62727/api/account/login", formProps, {
-      withCredentials: true
-    });
+    await backend.post("/account/login", formProps);
     dispatch({ type: AUTH_SUCCESS });
   } catch (error) {
     dispatch({ type: AUTH_FAILURE, message: error.response.data.message });
@@ -39,10 +37,7 @@ export const login = formProps => async dispatch => {
 
 export const signup = formProps => async dispatch => {
   try {
-    const response = await axios.post(
-      "http://localhost:62727/api/account/register",
-      formProps
-    );
+    const response = await backend.post("/account/register", formProps);
     dispatch({ type: SIGNUP_SUCCESS, succeeded: response.data.succeeded });
   } catch (error) {
     dispatch({ type: SIGNUP_FAILURE, errors: error.response.data.errors });

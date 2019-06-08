@@ -16,7 +16,8 @@ class FormField extends React.Component {
     type,
     placeholder,
     authMessage,
-    signupMessage,
+    emailError,
+    passwordError,
     displayErr,
     inputFieldStyle
   }) => {
@@ -26,15 +27,20 @@ class FormField extends React.Component {
         error={
           (meta.error && meta.touched) ||
           authMessage !== null ||
-          signupMessage !== null
+          emailError !== null ||
+          passwordError !== null
         }
       >
         {authMessage && displayErr ? (
           <FormHelperText>{authMessage}</FormHelperText>
         ) : null}
 
-        {signupMessage && displayErr ? (
-          <FormHelperText>{signupMessage}</FormHelperText>
+        {emailError && type === "email" ? (
+          <FormHelperText>{emailError}</FormHelperText>
+        ) : null}
+
+        {passwordError && type === "password" ? (
+          <FormHelperText>{passwordError}</FormHelperText>
         ) : null}
 
         <label htmlFor={name} className="form__label">
@@ -61,7 +67,8 @@ class FormField extends React.Component {
       title,
       type,
       authMessage,
-      signupMessage,
+      emailError,
+      passwordError,
       displayErr,
       inputFieldStyle
     } = this.props;
@@ -73,7 +80,8 @@ class FormField extends React.Component {
         type={type}
         title={title}
         authMessage={authMessage}
-        signupMessage={signupMessage}
+        emailError={emailError}
+        passwordError={passwordError}
         inputFieldStyle={inputFieldStyle}
         displayErr={displayErr}
       />
@@ -84,7 +92,8 @@ class FormField extends React.Component {
 const mapStateToProps = state => {
   return {
     authMessage: state.auth.message,
-    signupMessage: state.signup.message
+    emailError: state.signup.emailError,
+    passwordError: state.signup.passwordError
   };
 };
 

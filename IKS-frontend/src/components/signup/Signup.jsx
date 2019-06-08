@@ -7,9 +7,9 @@ import SignupForm from "./SignupForm";
 
 class Register extends React.Component {
   render() {
-    const { isAuthenticated } = this.props;
+    const { isRegistered } = this.props;
     const { gridContainer, gridItem } = loginStyles;
-    return !isAuthenticated ? (
+    return !isRegistered ? (
       <Grid container spacing={0} styles={gridContainer}>
         <Grid item xs={12} sm={10} md={6} lg={5} xl={4}>
           <SignupForm />

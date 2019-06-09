@@ -2,7 +2,6 @@ import React from "react";
 import { withStyles } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
-import PropTypes from "prop-types";
 import { reduxForm, Field } from "redux-form";
 import { connect } from "react-redux";
 import { compose } from "redux";
@@ -13,17 +12,7 @@ import PrimaryButton from "../general/PrimaryButton";
 import LoginField from "../general/FormField";
 import RegisterLink from "../general/FormLink";
 import { login } from "../../actions/index";
-
-const validate = values => {
-  const errors = {};
-  if (!values.email) {
-    errors.email = "Required";
-  }
-  if (!values.password) {
-    errors.password = "Required";
-  }
-  return errors;
-};
+import validate from "../../utils/validation/validateLogin";
 
 class LoginForm extends React.Component {
   onSubmit = formProps => {
@@ -101,10 +90,6 @@ class LoginForm extends React.Component {
     );
   }
 }
-
-LoginForm.propTypes = {
-  classes: PropTypes.object.isRequired
-};
 
 export default compose(
   connect(

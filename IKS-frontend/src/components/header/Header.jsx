@@ -1,18 +1,19 @@
 import React from "react";
-import requireAuth from "../../utils/requireAuth";
-import { fetchUserProfile } from "../../actions";
+import SearchBar from "./SearchBar";
+import HeaderNavBar from "./HeaderNavBar";
 
 class Header extends React.Component {
   render() {
-    return <div>HEADER!</div>;
+    const { profile } = this.props;
+    return (
+      <div className="container__header">
+        <header className="header">
+          <SearchBar />
+          <HeaderNavBar profile={profile} />
+        </header>
+      </div>
+    );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.isAuthenticated,
-    isLoading: state.auth.isLoading
-  };
-};
-
-export default requireAuth(Header, mapStateToProps, fetchUserProfile);
+export default Header;

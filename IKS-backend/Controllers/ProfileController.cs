@@ -40,8 +40,9 @@ namespace My_IKS.Controllers
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             var role = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimsIdentity.DefaultRoleClaimType).Value;
-
-            return Ok(_mapper.Map<UserProfile>(user));
+            var userProfile = _mapper.Map<UserProfile>(user);
+            userProfile.Role = role;
+            return Ok(userProfile);
         }
 
         [HttpPut("edit")]

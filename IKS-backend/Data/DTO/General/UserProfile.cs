@@ -12,6 +12,7 @@ namespace My_IKS.Data.DTO.General
         public string LastName { get; set; }
         public string JobTitle { get; set; }
         public string Location { get; set; }
+        public string Role { get; set; }
         public DateTime NextSLD { get; set; }
     }
 }

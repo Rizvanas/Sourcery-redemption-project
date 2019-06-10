@@ -19,6 +19,7 @@ const SlackButton = props => {
         root: classes.buttonRoot,
         label: classes.buttonLabel
       }}
+      disabled
     >
       <SlackIcon />
       {text}

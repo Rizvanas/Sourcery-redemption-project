@@ -7,9 +7,9 @@ import LoginForm from "./LoginForm";
 
 class Login extends React.Component {
   render() {
-    const { isAuthenticated } = this.props;
+    const { isLoggedIn } = this.props;
     const { gridContainer, gridItem } = loginStyles;
-    return !isAuthenticated ? (
+    return !isLoggedIn ? (
       <Grid container spacing={0} styles={gridContainer}>
         <Grid item xs={12} sm={10} md={6} lg={5} xl={4}>
           <LoginForm />
@@ -24,7 +24,7 @@ class Login extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.isAuthenticated
+    isLoggedIn: state.auth.isLoggedIn
   };
 };
 

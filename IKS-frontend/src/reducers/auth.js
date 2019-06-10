@@ -7,6 +7,7 @@ import {
 
 const INITIAL_STATE = {
   isAuthenticated: false,
+  isLoggedIn: false,
   user: {},
   isLoading: true,
   message: null
@@ -16,14 +17,13 @@ export default function (state = INITIAL_STATE, action) {
     case AUTH_SUCCESS:
       return {
         ...state,
-        isAuthenticated: true,
-        isLoading: false
+        isLoading: false,
+        isLoggedIn: true
       };
 
     case AUTH_FAILURE:
       return {
         ...state,
-        isAuthenticated: false,
         message: action.message,
         isLoading: false
       };

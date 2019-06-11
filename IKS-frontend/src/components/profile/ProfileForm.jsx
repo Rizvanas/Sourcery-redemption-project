@@ -1,89 +1,90 @@
 import React from "react";
-import { reduxForm } from "redux-form";
-import disabledCalendar from "../../content/images/calendar-disabled.svg";
+import { MenuItem } from "@material-ui/core";
+import { Formik, Field, Form } from "formik";
+import { connect } from "react-router-dom";
+import DatePickerField from "../general/DatePickerField";
+import TextInputField from "../general/TextInputField";
+import profileSchema from "../../utils/validation/profileSchema";
+
+const cityOptions = [
+  { value: "Chicago" },
+  { value: "Toronto" },
+  { value: "London" },
+  { value: "Kaunas" },
+  { value: "Vilnius" },
+  { value: "Unknown" }
+];
 
 class ProfileForm extends React.Component {
   render() {
+    const { profile } = this.props;
     return (
       <div className="profile__section section">
-        <form className="form">
-          <div className="form__row">
-            <div className="form__field">
-              <label htmlFor="name" className="form__label">
-                Name
-              </label>
-              <input
-                className="form__input form__input--disabled"
-                type="text"
-                id="name"
-                value="Carolyn"
-                disabled=""
-              />
-            </div>
-            <div className="form__field">
-              <label htmlFor="surname" className="form__label">
-                Surname
-              </label>
-              <input
-                className="form__input form__input--disabled"
-                type="text"
-                id="surname"
-                value="Simpson"
-                disabled=""
-              />
-            </div>
-          </div>
-          <div className="form__row">
-            <div className="form__field form__field--wide">
-              <label htmlFor="email" className="form__label">
-                Email address
-              </label>
-              <input
-                type="text"
-                id="email"
-                className="form__input form__input--disabled"
-                value="carolyn.simpson@gmail.com"
-                disabled=""
-              />
-            </div>
-          </div>
-          <div className="form__row">
-            <div className="form__field">
-              <label htmlFor="city" className="form__label">
-                City
-              </label>
-              <select
-                id="city"
-                className="form__input form__input--disabled"
-                disabled=""
-              >
-                <option>Vilnius</option>
-                <option>Kaunas</option>
-              </select>
-            </div>
-          </div>
-          <div className="form__row form__row--last">
-            <div className="form__field">
-              <label htmlFor="sld" className="form__label">
-                Next SLD
-              </label>
-              <div className="form__input-suffix-container">
-                <input
-                  type="text"
-                  id="sld"
-                  className="form__input form__input--disabled form__input-suffix-field"
-                  value="2019.03.21"
-                  disabled=""
+        <Formik
+          initialValues={{ ...profile, nextSLD: new Date(profile.nextSLD) }}
+          onSubmit={values => console.log(values)}
+          validationSchema={profileSchema}
+        >
+          {({ isSubmitting, dirty, handleSubmit, handleChange }) => (
+            <Form className="form" onSubmit={handleSubmit}>
+              <div className="form__row">
+                <Field
+                  autoFocus
+                  className="form__field"
+                  name="firstName"
+                  label="Name"
+                  placeholder="Enter your name"
+                  onChange={handleChange}
+                  component={TextInputField}
                 />
-                <img
-                  className="form__input-suffix"
-                  src={disabledCalendar}
-                  alt="calendar"
+                <Field
+                  className="form__field"
+                  name="lastName"
+                  label="Surname"
+                  placeholder="Enter your surname"
+                  onChange={handleChange}
+                  component={TextInputField}
                 />
               </div>
-            </div>
-          </div>
-        </form>
+              <div className="form__row">
+                <Field
+                  className="form__field form__field--wide"
+                  name="email"
+                  label="Email address"
+                  placeholder="Enter your email address"
+                  onChange={handleChange}
+                  component={TextInputField}
+                />
+              </div>
+              <div className="form__row">
+                <Field
+                  select
+                  className="form__field"
+                  name="location"
+                  label="City"
+                  onChange={handleChange}
+                  component={TextInputField}
+                >
+                  {cityOptions.map(c => (
+                    <MenuItem key={c.value} value={c.value}>
+                      {c.value}
+                    </MenuItem>
+                  ))}
+                </Field>
+              </div>
+              <div className="form__row form__row--last">
+                <Field
+                  name="nextSLD"
+                  label="Next SLD"
+                  component={DatePickerField}
+                />
+              </div>
+              <button type="submit" disabled={!isSubmitting && !dirty}>
+                Submit test
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     );
   }

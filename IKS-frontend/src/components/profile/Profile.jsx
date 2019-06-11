@@ -29,7 +29,7 @@ class Profile extends React.Component {
           />
           <div className="profile content__scrollable">
             <ProfileHeader />
-            <ProfileForm />
+            <ProfileForm profile={userProfile} />
           </div>
         </div>
       </React.Fragment>

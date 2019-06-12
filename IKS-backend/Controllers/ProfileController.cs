@@ -45,7 +45,7 @@ namespace My_IKS.Controllers
             return Ok(userProfile);
         }
 
-        [HttpPut("edit")]
+        [HttpPatch]
         public async Task<IActionResult> EditUserProfile([FromBody] UserProfile userProfileRequest)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);

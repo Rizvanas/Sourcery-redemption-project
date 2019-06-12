@@ -8,7 +8,6 @@ import {
 const INITIAL_STATE = {
   isAuthenticated: false,
   isLoggedIn: false,
-  user: {},
   isLoading: true,
   message: null
 };
@@ -32,13 +31,11 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         isAuthenticated: action.user !== null,
-        user: action.user,
         isLoading: false
       };
     case USER_PROFILE_FETCH_FAILURE:
       return {
         ...state,
-        user: action.user,
         isLoading: false
       };
 

@@ -1,10 +1,12 @@
 import React from "react";
 import { MenuItem } from "@material-ui/core";
 import { Formik, Field, Form } from "formik";
-import { connect } from "react-router-dom";
+import { connect } from "react-redux";
 import DatePickerField from "../general/DatePickerField";
 import TextInputField from "../general/TextInputField";
 import profileSchema from "../../utils/validation/profileSchema";
+import { updateUserProfile, fetchUserProfile } from "../../actions";
+import FormButtons from "../general/FormButtons";
 
 const cityOptions = [
   { value: "Chicago" },
@@ -17,12 +19,12 @@ const cityOptions = [
 
 class ProfileForm extends React.Component {
   render() {
-    const { profile } = this.props;
+    const { profile, edit, updateUserProfile } = this.props;
     return (
       <div className="profile__section section">
         <Formik
           initialValues={{ ...profile, nextSLD: new Date(profile.nextSLD) }}
-          onSubmit={values => console.log(values)}
+          onSubmit={formProps => updateUserProfile(formProps)}
           validationSchema={profileSchema}
         >
           {({ isSubmitting, dirty, handleSubmit, handleChange }) => (
@@ -34,6 +36,7 @@ class ProfileForm extends React.Component {
                   name="firstName"
                   label="Name"
                   placeholder="Enter your name"
+                  disabled={!edit}
                   onChange={handleChange}
                   component={TextInputField}
                 />
@@ -42,6 +45,7 @@ class ProfileForm extends React.Component {
                   name="lastName"
                   label="Surname"
                   placeholder="Enter your surname"
+                  disabled={!edit}
                   onChange={handleChange}
                   component={TextInputField}
                 />
@@ -52,6 +56,7 @@ class ProfileForm extends React.Component {
                   name="email"
                   label="Email address"
                   placeholder="Enter your email address"
+                  disabled={!edit}
                   onChange={handleChange}
                   component={TextInputField}
                 />
@@ -62,6 +67,7 @@ class ProfileForm extends React.Component {
                   className="form__field"
                   name="location"
                   label="City"
+                  disabled={!edit}
                   onChange={handleChange}
                   component={TextInputField}
                 >
@@ -76,12 +82,15 @@ class ProfileForm extends React.Component {
                 <Field
                   name="nextSLD"
                   label="Next SLD"
+                  disabled={!edit}
                   component={DatePickerField}
                 />
               </div>
-              <button type="submit" disabled={!isSubmitting && !dirty}>
-                Submit test
-              </button>
+              <FormButtons
+                edit={edit}
+                isSubmitting={isSubmitting}
+                dirty={dirty}
+              />
             </Form>
           )}
         </Formik>
@@ -90,4 +99,14 @@ class ProfileForm extends React.Component {
   }
 }
 
-export default ProfileForm;
+const mapStateToProps = state => {
+  return {
+    isUpdated: state.user.isUpdated,
+    userProfile: state.user.profile
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { updateUserProfile }
+)(ProfileForm);

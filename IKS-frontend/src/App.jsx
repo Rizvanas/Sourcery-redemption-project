@@ -15,7 +15,7 @@ class App extends React.Component {
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/" component={Mentors} />
-          <Route exact path="/profile" component={Profile} />
+          <Route exact path="/(profile|profile/edit)" component={Profile} />
         </Switch>
       </MuiPickersUtilsProvider>
     );

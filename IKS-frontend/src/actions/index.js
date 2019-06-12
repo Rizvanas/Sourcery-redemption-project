@@ -5,10 +5,31 @@ import {
   AUTH_FAILURE,
   USER_PROFILE_FETCH_SUCCESS,
   USER_PROFILE_FETCH_FAILURE,
+  PROFILE_UPDATE_SUCCESS,
+  PROFILE_UPDATE_FAILURE,
   SIGNUP_SUCCESS,
   SIGNUP_FAILURE,
   IS_LOADING
 } from "./constants";
+
+export const signup = formProps => async dispatch => {
+  try {
+    const response = await backend.post("/account/register", formProps);
+    dispatch({ type: SIGNUP_SUCCESS, succeeded: response.data.succeeded });
+  } catch (error) {
+    dispatch({ type: SIGNUP_FAILURE, errors: error.response.data.errors });
+  }
+};
+
+export const login = formProps => async dispatch => {
+  try {
+    dispatch({ type: IS_LOADING });
+    await backend.post("/account/login", formProps);
+    dispatch({ type: AUTH_SUCCESS });
+  } catch (error) {
+    dispatch({ type: AUTH_FAILURE, message: error.response.data.message });
+  }
+};
 
 export const fetchUserProfile = () => async dispatch => {
   try {
@@ -23,21 +44,11 @@ export const fetchUserProfile = () => async dispatch => {
   }
 };
 
-export const login = formProps => async dispatch => {
+export const updateUserProfile = formProps => async dispatch => {
   try {
-    dispatch({ type: IS_LOADING });
-    await backend.post("/account/login", formProps);
-    dispatch({ type: AUTH_SUCCESS });
+    await backend.patch("/profile", formProps);
+    dispatch({ type: PROFILE_UPDATE_SUCCESS });
   } catch (error) {
-    dispatch({ type: AUTH_FAILURE, message: error.response.data.message });
-  }
-};
-
-export const signup = formProps => async dispatch => {
-  try {
-    const response = await backend.post("/account/register", formProps);
-    dispatch({ type: SIGNUP_SUCCESS, succeeded: response.data.succeeded });
-  } catch (error) {
-    dispatch({ type: SIGNUP_FAILURE, errors: error.response.data.errors });
+    dispatch({ type: PROFILE_UPDATE_FAILURE });
   }
 };

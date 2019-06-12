@@ -8,12 +8,19 @@ import { fetchUserProfile } from "../actions";
 export default (ChildComponent, actionCreator) => {
   class ComposedComponent extends React.Component {
     componentDidMount() {
-      const { isAuthenticated } = this.props;
-      if (!isAuthenticated) {
+      const { isAuthenticated, isUpdated } = this.props;
+      if (!isAuthenticated || isUpdated) {
         this.props.fetchUserProfile();
       }
       if (actionCreator != null) {
         this.props.actionCreator();
+      }
+    }
+
+    componentDidUpdate() {
+      const { isUpdated } = this.props;
+      if (isUpdated) {
+        this.props.fetchUserProfile();
       }
     }
 
@@ -24,6 +31,7 @@ export default (ChildComponent, actionCreator) => {
         isLoading,
         userProfile
       } = this.props;
+
       if (isLoading) {
         return <div>Loading...</div>;
       }
@@ -48,6 +56,7 @@ export default (ChildComponent, actionCreator) => {
       isAuthenticated: state.auth.isAuthenticated,
       isLoggedIn: state.auth.isLoggedIn,
       isLoading: state.auth.isLoading,
+      isUpdated: state.user.isUpdated,
       userProfile: state.user.profile
     };
   };

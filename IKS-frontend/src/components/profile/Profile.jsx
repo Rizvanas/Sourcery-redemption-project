@@ -6,7 +6,10 @@ import ProfileHeader from "./ProfileHeader";
 
 class Profile extends React.Component {
   render() {
-    const { userProfile } = this.props;
+    const { history, userProfile } = this.props;
+    console.log(history);
+    const edit = history.location.pathname.includes("edit");
+    console.log(edit);
     return (
       <React.Fragment>
         <h1 className="heading1">My profile</h1>
@@ -28,8 +31,8 @@ class Profile extends React.Component {
             ]}
           />
           <div className="profile content__scrollable">
-            <ProfileHeader />
-            <ProfileForm profile={userProfile} />
+            <ProfileHeader edit={edit} />
+            <ProfileForm profile={userProfile} edit={edit} />
           </div>
         </div>
       </React.Fragment>

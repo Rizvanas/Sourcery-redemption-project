@@ -1,2 +1,2 @@
-# Sourcery-redemption-project
-Self-redemtion project for an unfinished team job in a "Sourcery for developers" academy.
+# sourcery-academy-project
+Unfinished reconstruction of a team project received at the "Sourcery for developers" academy.
